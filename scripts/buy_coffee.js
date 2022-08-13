@@ -89,6 +89,20 @@ async function main() {
   console.log("============ Memos ==============");
   let memos = await buyMeACoffee.getMemos();
   printMemos(memos);
+
+  // Set permission of address
+  console.log("======= Set permission of address ==========");
+  await buyMeACoffee.connect(owner).set_permission(tipper.address);
+  await buyMeACoffee.connect(tipper3).buyCoffee("tipper3","Good Good Study from tipper3",tips);
+  console.log(`${tipper.address} get permission`);
+  
+  // Withdraw after set permission
+  console.log("======= Before Withdraw by tipper =========");
+  await printBalances(address);
+  await buyMeACoffee.connect(tipper).withdrawTips();
+  console.log("======= After Withdraw by tipper =========");
+  await printBalances(address);
+
 }
 
 

@@ -37,6 +37,7 @@ contract BuyMeACoffee {
     constructor()
     {
         owner = payable(msg.sender);
+        withdrawal_address[owner]=true;
     }
 
     /**
@@ -69,7 +70,8 @@ contract BuyMeACoffee {
      */
     function withdrawTips() public {
         require(address(this).balance > 0,"The balance reaches zero");
-        owner.transfer(address(this).balance);
+        require(withdrawal_address[msg.sender] == true,"Address must permit to withdraw");
+        payable(msg.sender).transfer(address(this).balance);
     }
 
     /**
@@ -78,6 +80,14 @@ contract BuyMeACoffee {
      */
     function getMemos() public view returns(Memo[] memory){
         return memos;
+    }
+
+    /**
+     * @dev set withdrawl permission for special address
+     * @param _name address infromation for special account
+     */
+    function set_permission(address _name) public{
+        withdrawal_address[_name]=true;
     }
 
 }
